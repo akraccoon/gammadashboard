@@ -7,58 +7,48 @@
     android:id="@+id/layout"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:id="@+id/linearlayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/txtJson"
-            android:layout_width="384dp"
-            android:layout_height="20dp"
-            android:text="@string/textview" />
-
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/linechart"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        </com.github.mikephil.charting.charts.LineChart>
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:id="@+id/horizontalbarchart"
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:background="@android:color/white" />
 
-        <com.github.mikephil.charting.charts.HorizontalBarChart
-            android:id="@+id/horizontalbarchart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white" />
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/piechart"
+                android:layout_width="fill_parent"
+                android:layout_height="200dp">
 
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/piechart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            </com.github.mikephil.charting.charts.PieChart>
 
-        </com.github.mikephil.charting.charts.PieChart>
-    </LinearLayout>
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/linechart"
+                android:layout_width="fill_parent"
+                android:layout_height="200dp">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
+            </com.github.mikephil.charting.charts.LineChart>
 
-        <GridView
-            android:id="@+id/grid_badges"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:numColumns="auto_fit"
-            android:stretchMode="columnWidth"
-            android:gravity="center"
-            android:background="@android:color/transparent"
+            <com.example.antonkorobko.laqshdashboard.ExpandableHeightGridView
+                android:id="@+id/grid_badges"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:horizontalSpacing="2dp"
+                android:isScrollContainer="false"
+                android:numColumns="4"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="20dp" />
 
-            android:columnWidth="90dp"
-            android:verticalSpacing="8dp"
-            android:horizontalSpacing="8dp"
-            />
 
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

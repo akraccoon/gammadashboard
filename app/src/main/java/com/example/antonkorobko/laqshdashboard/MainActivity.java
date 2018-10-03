@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.charts.LineChart;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,10 +56,56 @@ public class MainActivity extends AppCompatActivity{
 //        txtJson = (TextView) findViewById(R.id.txtJson);
 //        LineChart linechart = (LineChart) findViewById(R.id.linechart);
 //        PieChart piechart = (PieChart) findViewById(R.id.piechart);
-        HorizontalBarChart horizontalbarchart = (HorizontalBarChart) findViewById(R.id.horizontalbarchart);
+//        HorizontalBarChart horizontalbarchart = (HorizontalBarChart) findViewById(R.id.horizontalbarchart);
+
 
         new JsonTask(new JsonTask.AsyncResponse(){
-            // BAGEZZZ
+
+            @Override
+            public void processFinish(String output){
+                // Need to get overall points from https://gamma-demo-stage.raccoongang.com/api/v0/points/?username=staff
+
+                // STATUS HORIZONTAL BAR
+                Log.d("MAIN Response: ", "> " + output);
+                try {
+                    ArrayList<HashMap> progressMap = jsonArrayToMap(output);
+                    System.out.println("HORIZONTAL map : "+progressMap);
+                    // call HorizontalBarChart
+
+                    HorizontalBarChartView horizontalbarchartview = new HorizontalBarChartView(MainActivity.this);
+                    horizontalbarchartview.showHorizontalBarChart(progressMap);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).execute("https://gamma-demo-stage.raccoongang.com/api/v0/statuses/?username=staff");
+
+
+        new JsonTask(new JsonTask.AsyncResponse(){
+
+            @Override
+            public void processFinish(String output){
+                // Need to get status limits from https://gamma-demo-stage.raccoongang.com/api/v0/statuses/?username=staff
+
+                // FILLED LINE
+                Log.d("MAIN Response: ", "> " + output);
+                try {
+                    ArrayList<HashMap> filledLineMap = jsonArrayToMap(output);
+                    System.out.println("PROGREZZ map : "+filledLineMap);
+                    // call FilledLineChart
+
+                    LineChartView linechartview = new LineChartView(MainActivity.this);
+                    linechartview.showHorizontalBarChart(filledLineMap);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).execute("https://gamma-demo-stage.raccoongang.com/api/v0/progress/?username=staff");
+
+
+        new JsonTask(new JsonTask.AsyncResponse(){
             @Override
             public void processFinish(String output){
                 try {
@@ -71,34 +118,9 @@ public class MainActivity extends AppCompatActivity{
             }
         }).execute("https://gamma-demo-stage.raccoongang.com/api/v0/badges/?username=staff");
 
-        new JsonTask(new JsonTask.AsyncResponse(){
-        // STATUSES
-            @Override
-            public void processFinish(String output){
-                Log.d("MAIN Response: ", "> " + output);
-                try {
-                    jsonArrayToMap(output);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).execute("https://gamma-demo-stage.raccoongang.com/api/v0/statuses/?username=staff");
 
         new JsonTask(new JsonTask.AsyncResponse(){
-
-            @Override
-            public void processFinish(String output){
-                Log.d("MAIN Response: ", "> " + output);
-                try {
-                    jsonArrayToMap(output);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).execute("https://gamma-demo-stage.raccoongang.com/api/v0/progress/?username=staff");
-
-        new JsonTask(new JsonTask.AsyncResponse(){
-
+        // PIE CHART
             @Override
             public void processFinish(String output){
                 Log.d("MAIN Response: ", "> " + output);
@@ -113,47 +135,20 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void showBadgesBlock(ArrayList<HashMap> badgesMap) {
-//        LinearLayout layout = (LinearLayout)findViewById(R.id.linearlayout);
-//        ConstraintSet set = new ConstraintSet();
-
-        GridView gridview = (GridView) findViewById(R.id.grid_badges);
+        ExpandableHeightGridView gridview = (ExpandableHeightGridView) findViewById(R.id.grid_badges);
         gridview.setAdapter(new ImageAdapter(this));
+        gridview.setExpanded(true);
         ArrayList badges = new ArrayList<>();
 
         for (int i = 0; i < badgesMap.size(); i++) {
-
             URL url = null;
             String badgeUrl = (String) badgesMap.get(i).get("url");
             if (badgeUrl != null && !badgeUrl.isEmpty() && !badgeUrl.equals("null")) {
-
                 System.out.println("BAGEZZZ URRRL " + badgeUrl);
-//                try {
-//                    url = new URL(badgeUrl);
-//                } catch (MalformedURLException e) {
-//                    e.printStackTrace();
-//                }
-
                 badges.add(new Badge(badgeUrl));
-
-//                Bitmap bmp = null;
-//                try {
-//                    bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-
-//                ImageView image = new ImageView(this);
-//                image.setId(View.generateViewId());
-//                layout.addView(image, 0);
-//                set.connect(image.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP, 60);
-//                image.setImageBitmap(bmp);
-
-//                set.clone(layout);
-//                set.applyTo(layout);
             }
         }
-//        GridView gvBadges = findViewById( R.id.grid_badges);
+
         BadgesListAdapterWithCache adapterBadges = new BadgesListAdapterWithCache(this, badges);
         gridview.setAdapter(adapterBadges);
     }
