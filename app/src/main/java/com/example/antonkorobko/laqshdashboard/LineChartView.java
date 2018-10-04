@@ -1,6 +1,5 @@
 package com.example.antonkorobko.laqshdashboard;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -8,7 +7,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
-
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
@@ -38,7 +36,7 @@ public class LineChartView extends AppCompatActivity {
     protected Typeface mTfRegular;
     protected Typeface mTfLight;
     private LineChart linechart;
-    private int mFillColor = Color.argb(150, 51, 181, 51);
+    private int mFillColor = Color.argb(150, 10, 200, 10);
 
     public LineChartView(Context context){
         this.context = context;
@@ -55,32 +53,32 @@ public class LineChartView extends AppCompatActivity {
         llXAxis.enableDashedLine(10f, 10f, 0f);
         llXAxis.setLabelPosition(LimitLabelPosition.RIGHT_BOTTOM);
         llXAxis.setTextSize(10f);
-
-        LimitLine ll1 = new LimitLine(10f, "Good student");
-        ll1.setLineColor(Color.RED);
-        ll1.setLineWidth(4f);
-        ll1.setTextColor(Color.BLACK);
-        ll1.setTextSize(12f);
-        ll1.setLineWidth(4f);
-        ll1.enableDashedLine(10f, 10f, 0f);
-
-
-        LimitLine ll2 = new LimitLine(30f, "Super student");
-        ll2.setLineColor(Color.BLUE);
-        ll2.setLineWidth(4f);
-        ll2.setTextColor(Color.BLACK);
-        ll2.setTextSize(12f);
-        ll2.setLineWidth(4f);
-        ll2.enableDashedLine(10f, 10f, 0f);
-
+//
+//        LimitLine ll1 = new LimitLine(10f, "Good student");
+//        ll1.setLineColor(Color.RED);
+//        ll1.setLineWidth(4f);
+//        ll1.setTextColor(Color.BLACK);
+//        ll1.setTextSize(12f);
+//        ll1.setLineWidth(4f);
+//        ll1.enableDashedLine(10f, 10f, 0f);
+//
+//
+//        LimitLine ll2 = new LimitLine(30f, "Super student");
+//        ll2.setLineColor(Color.BLUE);
+//        ll2.setLineWidth(4f);
+//        ll2.setTextColor(Color.BLACK);
+//        ll2.setTextSize(12f);
+//        ll2.setLineWidth(4f);
+//        ll2.enableDashedLine(10f, 10f, 0f);
+//
 
         XAxis xAxis = linechart.getXAxis();
         xAxis.enableGridDashedLine(10f, 10f, 0f);
         //xAxis.setValueFormatter(new MyCustomXAxisValueFormatter());
         //xAxis.addLimitLine(llXAxis); // add x-axis limit line
-
-        xAxis.addLimitLine(ll1);
-        xAxis.addLimitLine(ll2);
+//
+//        xAxis.addLimitLine(ll1);
+//        xAxis.addLimitLine(ll2);
 
 //        Typeface tf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
 
@@ -115,7 +113,7 @@ public class LineChartView extends AppCompatActivity {
         //linechart.getViewPortHandler().setMaximumScaleX(2f);
 
         // add data
-        setData(45, 100);
+        setData(10, 400);
 
 //        linechart.setVisibleXRange(20);
 //        linechart.setVisibleYRange(20f, AxisDependency.LEFT);

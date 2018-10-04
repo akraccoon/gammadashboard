@@ -3,6 +3,7 @@ package com.example.antonkorobko.laqshdashboard;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -56,7 +57,7 @@ public class HorizontalBarChartView extends AppCompatActivity {
 
 //        tvX = findViewById(R.id.tvXMax);
 //        tvY = findViewById(R.id.tvYMax);
-        horizontalbarchart.setMaxVisibleValueCount(60);
+        horizontalbarchart.setMaxVisibleValueCount(700);
         horizontalbarchart.setDrawGridBackground(false);
 
         XAxis xl = horizontalbarchart.getXAxis();
@@ -72,14 +73,32 @@ public class HorizontalBarChartView extends AppCompatActivity {
         yl.setDrawGridLines(true);
         yl.setAxisMinimum(0f);
 
-
         YAxis yr = horizontalbarchart.getAxisRight();
 //        yr.setTypeface(mTfLight);
         yr.setDrawAxisLine(true);
         yr.setDrawGridLines(false);
-        yr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+        yr.setAxisMinimum(700f); // this replaces setStartAtZero(true)
 
-        setData(1, 50);
+        LimitLine ll1 = new LimitLine(325f, "Good student");
+        ll1.setLineColor(Color.RED);
+        ll1.setLineWidth(4f);
+        ll1.setTextColor(Color.BLACK);
+        ll1.setTextSize(12f);
+        ll1.setLineWidth(4f);
+        ll1.enableDashedLine(10f, 10f, 0f);
+
+        LimitLine ll2 = new LimitLine(600f, "Super student");
+        ll2.setLineColor(Color.BLUE);
+        ll2.setLineWidth(4f);
+        ll2.setTextColor(Color.BLACK);
+        ll2.setTextSize(12f);
+        ll2.setLineWidth(4f);
+        ll2.enableDashedLine(10f, 10f, 0f);
+
+        yl.addLimitLine(ll1);
+        yl.addLimitLine(ll2);
+
+        setData(1, 700);
         horizontalbarchart.setFitBars(true);
         horizontalbarchart.animateY(2500);
 
@@ -95,7 +114,7 @@ public class HorizontalBarChartView extends AppCompatActivity {
 
     private void setData(int count, float range) {
 
-        float barWidth = 5f;
+        float barWidth = 3f;
         float spaceForBar = 10f;
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 

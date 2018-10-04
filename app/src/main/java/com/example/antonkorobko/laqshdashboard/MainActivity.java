@@ -36,7 +36,6 @@ import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity{
 
-    private String username = "staff";
     ProgressDialog pd;
     TextView txtJson;
     ImageView badgeImageView;
@@ -54,18 +53,15 @@ public class MainActivity extends AppCompatActivity{
 
         setContentView(R.layout.activity_main);
 //        txtJson = (TextView) findViewById(R.id.txtJson);
-//        LineChart linechart = (LineChart) findViewById(R.id.linechart);
-//        PieChart piechart = (PieChart) findViewById(R.id.piechart);
-//        HorizontalBarChart horizontalbarchart = (HorizontalBarChart) findViewById(R.id.horizontalbarchart);
 
+        String username = "staff";
+        String lmsUrl = "gamma-laqsh-dev.raccoongang.com";
 
         new JsonTask(new JsonTask.AsyncResponse(){
-
+            // STATUS HORIZONTAL BAR
             @Override
             public void processFinish(String output){
                 // Need to get overall points from https://gamma-demo-stage.raccoongang.com/api/v0/points/?username=staff
-
-                // STATUS HORIZONTAL BAR
                 Log.d("MAIN Response: ", "> " + output);
                 try {
                     ArrayList<HashMap> progressMap = jsonArrayToMap(output);
@@ -79,16 +75,31 @@ public class MainActivity extends AppCompatActivity{
                     e.printStackTrace();
                 }
             }
-        }).execute("https://gamma-demo-stage.raccoongang.com/api/v0/statuses/?username=staff");
+        }).execute("https://" + lmsUrl + "/api/v0/statuses/?username=" + username);
+
+        new JsonTask(new JsonTask.AsyncResponse(){
+            // PIE CHART
+            @Override
+            public void processFinish(String output){
+                Log.d("MAIN Response: ", "> " + output);
+                try {
+                    HashMap pieChart = jsonToMap(output);
+                    PieChartView pieChartView = new PieChartView(MainActivity.this);
+                    pieChartView.showPieChart(pieChart);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).execute("https://" + lmsUrl + "/api/v0/chart/?username=" + username);
 
 
         new JsonTask(new JsonTask.AsyncResponse(){
-
+            // FILLED LINE
             @Override
             public void processFinish(String output){
                 // Need to get status limits from https://gamma-demo-stage.raccoongang.com/api/v0/statuses/?username=staff
 
-                // FILLED LINE
                 Log.d("MAIN Response: ", "> " + output);
                 try {
                     ArrayList<HashMap> filledLineMap = jsonArrayToMap(output);
@@ -102,7 +113,7 @@ public class MainActivity extends AppCompatActivity{
                     e.printStackTrace();
                 }
             }
-        }).execute("https://gamma-demo-stage.raccoongang.com/api/v0/progress/?username=staff");
+        }).execute("https://" + lmsUrl + "/api/v0/progress/?username=" + username);
 
 
         new JsonTask(new JsonTask.AsyncResponse(){
@@ -116,21 +127,7 @@ public class MainActivity extends AppCompatActivity{
                     e.printStackTrace();
                 }
             }
-        }).execute("https://gamma-demo-stage.raccoongang.com/api/v0/badges/?username=staff");
-
-
-        new JsonTask(new JsonTask.AsyncResponse(){
-        // PIE CHART
-            @Override
-            public void processFinish(String output){
-                Log.d("MAIN Response: ", "> " + output);
-                try {
-                    jsonToMap(output);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).execute("https://gamma-demo-stage.raccoongang.com/api/v0/chart/?username=staff");
+        }).execute("https://" + lmsUrl + "/api/v0/badges/?username=" + username);
 
     }
 
@@ -184,7 +181,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    public static void jsonToMap(String t) throws JSONException {
+    public static HashMap jsonToMap(String t) throws JSONException {
 
         HashMap<String, String> map = new HashMap<>();
         JSONObject jObject = new JSONObject(t);
@@ -199,6 +196,7 @@ public class MainActivity extends AppCompatActivity{
 
         System.out.println("json : "+jObject);
         System.out.println("map : "+map);
+        return map;
     }
 
 

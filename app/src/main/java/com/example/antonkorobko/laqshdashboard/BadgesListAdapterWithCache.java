@@ -70,12 +70,10 @@ public class BadgesListAdapterWithCache  extends ArrayAdapter<Badge> {
 //            title.setText(p.title);
 
             if (!isBusy){
-                // download from internet
                 ImageDownloader imageDownloader = new ImageDownloader();
                 imageDownloader.download(p.img_url, img);
             }
             else{
-                // set default image
                 img.setImageResource(R.color.colorPrimary);
             }
         }
