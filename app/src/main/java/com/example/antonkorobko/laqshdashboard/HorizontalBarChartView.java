@@ -43,6 +43,7 @@ public class HorizontalBarChartView extends AppCompatActivity {
     protected Typeface mTfRegular;
     protected Typeface mTfLight;
     private HorizontalBarChart horizontalbarchart;
+    private int mFillColor = Color.argb(255, 43, 94, 117);
 
     public HorizontalBarChartView(Context context){
 //        HorizontalBarChart horizontalbarchart;
@@ -57,12 +58,12 @@ public class HorizontalBarChartView extends AppCompatActivity {
 
 //        tvX = findViewById(R.id.tvXMax);
 //        tvY = findViewById(R.id.tvYMax);
-        horizontalbarchart.setMaxVisibleValueCount(700);
+        horizontalbarchart.setMaxVisibleValueCount(800);
         horizontalbarchart.setDrawGridBackground(false);
 
         XAxis xl = horizontalbarchart.getXAxis();
-        xl.setPosition(XAxisPosition.BOTTOM);
-//        xl.setTypeface(mTfLight);
+        xl.setPosition(XAxisPosition.TOP);
+        xl.setTypeface(mTfLight);
         xl.setDrawAxisLine(true);
         xl.setDrawGridLines(false);
         xl.setGranularity(10f);
@@ -72,43 +73,44 @@ public class HorizontalBarChartView extends AppCompatActivity {
         yl.setDrawAxisLine(true);
         yl.setDrawGridLines(true);
         yl.setAxisMinimum(0f);
+        yl.setAxisMaximum(800f);
 
         YAxis yr = horizontalbarchart.getAxisRight();
 //        yr.setTypeface(mTfLight);
-        yr.setDrawAxisLine(true);
+        yr.setDrawAxisLine(false);
         yr.setDrawGridLines(false);
-        yr.setAxisMinimum(700f); // this replaces setStartAtZero(true)
+//        yr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
-        LimitLine ll1 = new LimitLine(325f, "Good student");
-        ll1.setLineColor(Color.RED);
-        ll1.setLineWidth(4f);
-        ll1.setTextColor(Color.BLACK);
-        ll1.setTextSize(12f);
-        ll1.setLineWidth(4f);
-        ll1.enableDashedLine(10f, 10f, 0f);
+        int arraySize = progressMap.size();
+        for (int i = 0; i < arraySize; i++) {
 
-        LimitLine ll2 = new LimitLine(600f, "Super student");
-        ll2.setLineColor(Color.BLUE);
-        ll2.setLineWidth(4f);
-        ll2.setTextColor(Color.BLACK);
-        ll2.setTextSize(12f);
-        ll2.setLineWidth(4f);
-        ll2.enableDashedLine(10f, 10f, 0f);
+            Float limitLinePosition =  Float.valueOf((String) progressMap.get(i).get("status_points"));
+            String limitLineLabel = (String) progressMap.get(i).get("title");
+//            String limitLineColor = (String) progressMap.get(i).get("status_color");
 
-        yl.addLimitLine(ll1);
-        yl.addLimitLine(ll2);
+            LimitLine ll = new LimitLine(limitLinePosition, limitLineLabel);
+            ll.setLineColor(Color.BLUE);
+            ll.setLineWidth(4f);
+            ll.setTextColor(Color.BLACK);
+            ll.setTextSize(12f);
+            ll.setLineWidth(4f);
+            ll.enableDashedLine(10f, 10f, 3f);
+            yl.addLimitLine(ll);
+        }
+
 
         setData(1, 700);
-        horizontalbarchart.setFitBars(true);
+        horizontalbarchart.setFitBars(false);
         horizontalbarchart.animateY(2500);
-
+//
         Legend l = horizontalbarchart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        l.setDrawInside(false);
-        l.setFormSize(8f);
-        l.setXEntrySpace(4f);
+        l.setEnabled(false);
+//        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+//        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+//        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+//        l.setDrawInside(false);
+//        l.setFormSize(8f);
+//        l.setXEntrySpace(4f);
     }
 
 
@@ -118,10 +120,8 @@ public class HorizontalBarChartView extends AppCompatActivity {
         float spaceForBar = 10f;
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 
-        for (int i = 0; i < count; i++) {
-            float val = (float) (Math.random() * range);
-            yVals1.add(new BarEntry(i * spaceForBar, val));
-        }
+        int pointsInt = Integer.parseInt(MainActivity.points);
+        yVals1.add(new BarEntry(1, pointsInt));
 
         BarDataSet set1;
 
@@ -132,10 +132,10 @@ public class HorizontalBarChartView extends AppCompatActivity {
             horizontalbarchart.getData().notifyDataChanged();
             horizontalbarchart.notifyDataSetChanged();
         } else {
-            set1 = new BarDataSet(yVals1, "DataSet 1");
+            set1 = new BarDataSet(yVals1, "Total points");
 
             set1.setDrawIcons(false);
-
+            set1.setColor(mFillColor);
             ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
             dataSets.add(set1);
 

@@ -36,7 +36,8 @@ public class LineChartView extends AppCompatActivity {
     protected Typeface mTfRegular;
     protected Typeface mTfLight;
     private LineChart linechart;
-    private int mFillColor = Color.argb(150, 10, 200, 10);
+    private int mFillColor = Color.argb(255, 206, 243, 105);
+    private int mLineFillColor = Color.argb(255, 111, 144, 29);
 
     public LineChartView(Context context){
         this.context = context;
@@ -98,7 +99,7 @@ public class LineChartView extends AppCompatActivity {
         leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
 //        leftAxis.addLimitLine(ll1);
 //        leftAxis.addLimitLine(ll2);
-        leftAxis.setAxisMaximum(400f);
+//        leftAxis.setAxisMaximum(400f);
         leftAxis.setAxisMinimum(0f);
         //leftAxis.setYOffset(20f);
         leftAxis.enableGridDashedLine(10f, 10f, 0f);
@@ -106,14 +107,13 @@ public class LineChartView extends AppCompatActivity {
 
         // limit lines are drawn behind data (and not on top)
         leftAxis.setDrawLimitLinesBehindData(true);
-
         linechart.getAxisRight().setEnabled(false);
 
         //linechart.getViewPortHandler().setMaximumScaleY(2f);
         //linechart.getViewPortHandler().setMaximumScaleX(2f);
 
         // add data
-        setData(10, 400);
+        setData(progressMap);
 
 //        linechart.setVisibleXRange(20);
 //        linechart.setVisibleYRange(20f, AxisDependency.LEFT);
@@ -124,21 +124,26 @@ public class LineChartView extends AppCompatActivity {
 
         // get the legend (only possible after setting data)
         Legend l = linechart.getLegend();
+        l.setEnabled(false);
 
         // modify the legend ...
-        l.setForm(LegendForm.CIRCLE);
+//        l.setForm(LegendForm.CIRCLE);
 
         // // dont forget to refresh the drawing
         // linechart.invalidate();
     }
-    private void setData(int count, float range) {
+
+    private void setData(ArrayList<HashMap> progressMap) {
 
         ArrayList<Entry> values = new ArrayList<Entry>();
 
-        for (int i = 0; i < count; i++) {
+        int arraySize = progressMap.size();
+        float totalValue = 0f;
+        for (int i = 0; i < arraySize; i++) {
 
-            float val = (float) (Math.random() * range) + 3;
-            values.add(new Entry(i, val));
+            float val = Float.valueOf((String) progressMap.get(i).get("points"));
+            totalValue = totalValue+val;
+            values.add(new Entry(i, totalValue));
         }
 
         LineDataSet set1;
@@ -151,15 +156,15 @@ public class LineChartView extends AppCompatActivity {
             linechart.notifyDataSetChanged();
         } else {
             // create a dataset and give it a type
-            set1 = new LineDataSet(values, "DataSet 1");
+            set1 = new LineDataSet(values, "Progress");
 
             set1.setDrawIcons(false);
 
             // set the line to be drawn like this "- - - - - -"
 //            set1.enableDashedLine(10f, 5f, 0f);
 //            set1.enableDashedHighlightLine(10f, 5f, 0f);
-            set1.setColor(Color.GREEN);
-            set1.setCircleColor(Color.GREEN);
+            set1.setColor(mLineFillColor);
+            set1.setCircleColor(mLineFillColor);
             set1.setLineWidth(4f);
 //            set1.setCircleRadius(3f);
 //            set1.setDrawCircleHole(false);

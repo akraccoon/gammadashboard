@@ -33,7 +33,9 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 public class PieChartView extends AppCompatActivity {
     private Context context;
@@ -74,7 +76,7 @@ public PieChartView(Context context){
         pieChart.setRotationAngle(180f);
         pieChart.setCenterTextOffset(0, -20);
 
-        setData(6, 100);
+        setData(pieChartMap);
 
         pieChart.animateY(1400, EaseInOutQuad);
 //
@@ -97,12 +99,20 @@ public PieChartView(Context context){
         pieChart.setEntryLabelTextSize(12f);
     }
 
-    private void setData(int count, float range) {
+    private void setData(HashMap pieChartMap) {
 
         ArrayList<PieEntry> values = new ArrayList<PieEntry>();
+        int arraySize = pieChartMap.size();
+        List<String> pieChartSections = new ArrayList<>();
 
-        for (int i = 0; i < count; i++) {
-            values.add(new PieEntry((float) ((Math.random() * range) + range / 5), mParties[i % mParties.length]));
+        for ( Object key : pieChartMap.keySet() ) {
+            pieChartSections.add((String) key);
+        }
+
+        for (int i = 0; i < arraySize; i++) {
+            String pieChartPieceMixed = (String) pieChartMap.get(pieChartSections.get(i));
+            int pieChartPiece = Integer.parseInt(pieChartPieceMixed.split(",")[1].replace("]", ""));
+            values.add(new PieEntry(pieChartPiece, pieChartSections.get(i)));
         }
 
         PieDataSet dataSet = new PieDataSet(values, "Your Enlightenment Points");
@@ -117,9 +127,19 @@ public PieChartView(Context context){
         data.setValueTextSize(11f);
         data.setValueTextColor(Color.WHITE);
         data.setValueTypeface(mTfLight);
+        pieChart.setCenterText(generateCenterSpannableText());
         pieChart.setData(data);
 
         pieChart.invalidate();
+    }
+
+    private SpannableString generateCenterSpannableText() {
+
+        SpannableString s = new SpannableString(MainActivity.points);
+        s.setSpan(new RelativeSizeSpan(4.7f), 0, s.length(), 0);
+        s.setSpan(new StyleSpan(Typeface.BOLD), 0, s.length(), 0);
+        s.setSpan(new ForegroundColorSpan(Color.GRAY), 0, s.length(), 0);
+        return s;
     }
 
     public static final EasingFunction EaseInOutQuad = new EasingFunction() {
@@ -135,10 +155,7 @@ public PieChartView(Context context){
     };
 
     protected String[] mParties = new String[] {
-            "Enrollment", "Problem", "Video", "Party D", "Party E", "Party F", "Party G", "Party H",
-            "Party I", "Party J", "Party K", "Party L", "Party M", "Party N", "Party O", "Party P",
-            "Party Q", "Party R", "Party S", "Party T", "Party U", "Party V", "Party W", "Party X",
-            "Party Y", "Party Z"
+            "Enrollment", "Problem", "Video", "Enrollment", "Problem", "Video", "Enrollment", "Problem", "Video"
     };
 
 }

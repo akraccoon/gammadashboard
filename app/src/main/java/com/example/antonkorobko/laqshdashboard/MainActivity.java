@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity{
     ProgressDialog pd;
     TextView txtJson;
     ImageView badgeImageView;
+    public static String points;
+
     private boolean lvBusy = false;
 
     @Override
@@ -55,7 +57,27 @@ public class MainActivity extends AppCompatActivity{
 //        txtJson = (TextView) findViewById(R.id.txtJson);
 
         String username = "staff";
-        String lmsUrl = "gamma-laqsh-dev.raccoongang.com";
+//        String username = "rimikt4";
+        String lmsUrl = "gamma-demo-stage.raccoongang.com";
+//        String lmsUrl = "gamma-laqsh-dev.raccoongang.com";
+        points = "0";
+
+        new JsonTask(new JsonTask.AsyncResponse(){
+            // GET POINTS
+            @Override
+            public void processFinish(String output){
+                Log.d("MAIN Response: ", "> " + output);
+                try {
+                    HashMap progressMap = jsonToMap(output);
+                    System.out.println("POINTS map : "+progressMap);
+                    System.out.println("POINTS: "+progressMap.get("points"));
+                    points = (String) progressMap.get("points");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).execute("https://" + lmsUrl + "/api/v0/points/?username=" + username);
+
 
         new JsonTask(new JsonTask.AsyncResponse(){
             // STATUS HORIZONTAL BAR
@@ -65,7 +87,7 @@ public class MainActivity extends AppCompatActivity{
                 Log.d("MAIN Response: ", "> " + output);
                 try {
                     ArrayList<HashMap> progressMap = jsonArrayToMap(output);
-                    System.out.println("HORIZONTAL map : "+progressMap);
+//                    System.out.println("HORIZONTAL map : "+progressMap);
                     // call HorizontalBarChart
 
                     HorizontalBarChartView horizontalbarchartview = new HorizontalBarChartView(MainActivity.this);
@@ -76,6 +98,7 @@ public class MainActivity extends AppCompatActivity{
                 }
             }
         }).execute("https://" + lmsUrl + "/api/v0/statuses/?username=" + username);
+
 
         new JsonTask(new JsonTask.AsyncResponse(){
             // PIE CHART
@@ -191,11 +214,7 @@ public class MainActivity extends AppCompatActivity{
             String key = (String)keys.next();
             String value = jObject.getString(key);
             map.put(key, value);
-
         }
-
-        System.out.println("json : "+jObject);
-        System.out.println("map : "+map);
         return map;
     }
 
@@ -218,7 +237,6 @@ public class MainActivity extends AppCompatActivity{
                 break;
         }
     }
-
 
     public boolean isLvBusy(){
         return lvBusy;
